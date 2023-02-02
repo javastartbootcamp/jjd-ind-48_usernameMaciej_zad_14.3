@@ -13,7 +13,7 @@ public class Main {
 
     private void run(Scanner scanner) {
         try {
-            Map<String, HashSet<Country>> countryMap = readCountriesFileToMap("countries.csv");
+            Map<String, Country> countryMap = readCountriesFileToMap("countries.csv");
             String country = getCountryFromUser(scanner);
             printCountryFromUser(countryMap, country);
         } catch (FileNotFoundException e) {
@@ -26,9 +26,9 @@ public class Main {
         return scanner.nextLine();
     }
 
-    private Map<String, HashSet<Country>> readCountriesFileToMap(String fileName) throws FileNotFoundException {
+    private Map<String, Country> readCountriesFileToMap(String fileName) throws FileNotFoundException {
         Scanner scanner = new Scanner(new File(fileName));
-        Map<String, HashSet<Country>> countryMap = new HashMap<>();
+        Map<String, Country> countryMap = new HashMap<>();
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             String[] split = line.split(";");
@@ -36,21 +36,17 @@ public class Main {
             String countryName = split[1];
             long population = Long.parseLong(split[2]);
             Country country = new Country(code, countryName, population);
-            HashSet<Country> categorySet = new HashSet<>();
-            categorySet.add(country);
-            countryMap.put(code, categorySet);
+            countryMap.put(code, country);
         }
         return countryMap;
     }
 
-    private void printCountryFromUser(Map<String, HashSet<Country>> countryMap, String countryCode) {
-        HashSet<Country> countries = countryMap.get(countryCode);
+    private void printCountryFromUser(Map<String, Country> countryMap, String countryCode) {
+        Country countries = countryMap.get(countryCode);
         if (countries == null) {
             System.out.println("Kod kraju " + countryCode + " nie został odnaleziony");
         } else {
-            for (Country country : countries) {
-                System.out.println(country);
-            }
+            System.out.println(countries);
         }
     }
 
